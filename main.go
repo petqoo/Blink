@@ -20,7 +20,7 @@ func initServer(port int) *Server {
 	}
 }
 func (s *Server) run() error {
-	err := net.Listen("tcp", s.port) if err != nil {
+	_, err := net.Listen("tcp", string(s.port)); if err != nil {
 		return err
 	}
 	return  nil

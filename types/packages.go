@@ -2,9 +2,20 @@ package types
 
 
 type FixedHeader struct {
-    ControlBytes byte
+	PacketType PacketType
+	Flags      ControlFlags
 	RemainingLength int
 }
+func (h FixedHeader) EncodeControlByte() byte {
+	return byte(h.PacketType)<<4 | byte(h.Flags)
+}
+
+func DecodeControlByte(b byte) (PacketType, ControlFlags) {
+	packetType := PacketType(b >> 4)
+	flags := ControlFlags(b & 0x0F)
+	return packetType, flags
+}
+
 
 type ConnectPacket struct {
 	FixedHeader FixedHeader

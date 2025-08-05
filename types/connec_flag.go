@@ -18,17 +18,29 @@ func (f ConnecFlag) IsSet(flag ConnecFlag) bool {
 	return f&flag != 0	
 }
 
-func (f ConnecFlag) Set(flag ConnecFlag){
-	f|= flag
+func (f *ConnecFlag) Set(flag ConnecFlag){
+	*f|= flag
 }
-func (f ConnecFlag) Clear(flag ConnecFlag){
-	f&^= flag
+func (f *ConnecFlag) Clear(flag ConnecFlag){
+	*f&^= flag
 }
 func (f *ConnecFlag) SetWillQoS(qos byte) {
 	*f &^= (WillQoS1 | WillQoS2)              
 	*f |= ConnecFlag((qos & 0x03) << 3)     
 }
 
-func (f ConnecFlag) WillQoS() byte {
-	return byte((f & (WillQoS1 | WillQoS2)) >> 3)
+
+func (f *ConnecFlag) WillQoS() byte {
+	return byte((*f >> 3) & 0x03)
+}
+
+func (f ConnecFlag) Parse() []ConnecFlag{
+	var setflags []ConnecFlag
+	AllFlag := []ConnecFlag{CleanSessionFlag, WillFlag, WillQoS1, WillQoS2, WillRetainFlag, PasswordFlag, UsernameFlag}
+	for _, flag := range AllFlag {
+		if f.IsSet(flag) {
+			setflags = append(setflags, flag)
+		}
+	}
+	return setflags
 }
