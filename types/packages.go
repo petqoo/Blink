@@ -9,8 +9,8 @@ type FixedHeader struct {
 type ConnectPacket struct {
 	FixedHeader FixedHeader
 	ProtocolName    string
-	ProtocolVersion byte
-	ConnectFlags    byte //bch mnnsach kyn bites hdo  CleanSession, WillFlag, WillQoS, WillRetain, PasswordFlag, UserNameFlag
+	ProtocolVersion MQTTProtocolVersion
+	ConnectFlags    ConnecFlag 
 	KeepAlive       uint16
 	ClientID        string
 	WillTopic       string 
@@ -21,6 +21,5 @@ type ConnectPacket struct {
 type CONNACKPacket struct {
 	FixedHeader FixedHeader
 	ConnectReturnCode ConnectReturnCode
-	
-
+	SessionPresent  SessionPresentFlag	
 }
